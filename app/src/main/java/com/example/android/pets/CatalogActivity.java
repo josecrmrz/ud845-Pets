@@ -30,6 +30,8 @@ import com.example.android.pets.data.PetContract;
 import com.example.android.pets.data.PetContract.PetEntry;
 import com.example.android.pets.data.PetDbHelper;
 
+import java.util.Locale;
+
 /**
  * Displays list of pets that were entered and stored in the app.
  */
@@ -67,7 +69,7 @@ public class CatalogActivity extends AppCompatActivity {
             // Display the number of rows in the Cursor (which reflects the number of rows in the
             // pets table in the database).
             TextView displayView = (TextView) findViewById(R.id.text_view_pet);
-            displayView.setText("Number of rows in pets database table: " + cursor.getCount());
+            displayView.setText(String.format(Locale.US, "Number of rows in pets database table: %d", cursor.getCount()));
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
             // resources and makes it invalid.
