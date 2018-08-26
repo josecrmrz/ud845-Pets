@@ -216,30 +216,25 @@ public class PetProvider extends ContentProvider {
 
         // If the {@link PetEntry#COLUMN_PET_NAME} key is present,
         // check that the name value is not null.
-        if (values.containsKey(PetEntry.COLUMN_PET_NAME)) {
-            String name = values.getAsString(PetEntry.COLUMN_PET_NAME);
-            if (name == null) {
-                throw new IllegalArgumentException("Pet requires a name");
-            }
+        // Check that the name is not null
+        String name = values.getAsString(PetEntry.COLUMN_PET_NAME);
+        if (TextUtils.isEmpty(name)) {
+            return 0;
+            //throw new IllegalArgumentException("Pet requires a name");
         }
 
-        // If the {@link PetEntry#COLUMN_PET_GENDER} key is present,
-        // check that the gender value is valid.
-        if (values.containsKey(PetEntry.COLUMN_PET_GENDER)) {
-            Integer gender = values.getAsInteger(PetEntry.COLUMN_PET_GENDER);
-            if (gender == null || !PetEntry.isValidGender(gender)) {
-                throw new IllegalArgumentException("Pet requires valid gender");
-            }
+        // Check that the gender is valid
+        Integer gender = values.getAsInteger(PetEntry.COLUMN_PET_GENDER);
+        if (gender == null || !PetEntry.isValidGender(gender)) {
+            return 0;
+            //throw new IllegalArgumentException("Pet requires valid gender");
         }
 
-        // If the {@link PetEntry#COLUMN_PET_WEIGHT} key is present,
-        // check that the weight value is valid.
-        if (values.containsKey(PetEntry.COLUMN_PET_WEIGHT)) {
-            // Check that the weight is greater than or equal to 0 kg
-            Integer weight = values.getAsInteger(PetEntry.COLUMN_PET_WEIGHT);
-            if (weight != null && weight < 0) {
-                throw new IllegalArgumentException("Pet requires valid weight");
-            }
+        // If the weight is provided, check that it's greater than or equal to 0 kg
+        Integer weight = values.getAsInteger(PetEntry.COLUMN_PET_WEIGHT);
+        if (weight != null && weight < 0) {
+            return 0;
+            //throw new IllegalArgumentException("Pet requires valid weight");
         }
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
