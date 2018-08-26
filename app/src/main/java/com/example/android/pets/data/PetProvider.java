@@ -115,21 +115,18 @@ public class PetProvider extends ContentProvider {
         String name = values.getAsString(PetEntry.COLUMN_PET_NAME);
         if (TextUtils.isEmpty(name)) {
             return null;
-            //throw new IllegalArgumentException("Pet requires a name");
         }
 
         // Check that the gender is valid
         Integer gender = values.getAsInteger(PetEntry.COLUMN_PET_GENDER);
         if (gender == null || !PetEntry.isValidGender(gender)) {
             return null;
-            //throw new IllegalArgumentException("Pet requires valid gender");
         }
 
         // If the weight is provided, check that it's greater than or equal to 0 kg
         Integer weight = values.getAsInteger(PetEntry.COLUMN_PET_WEIGHT);
         if (weight != null && weight < 0) {
             return null;
-            //throw new IllegalArgumentException("Pet requires valid weight");
         }
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
@@ -220,14 +217,12 @@ public class PetProvider extends ContentProvider {
         String name = values.getAsString(PetEntry.COLUMN_PET_NAME);
         if (TextUtils.isEmpty(name)) {
             return 0;
-            //throw new IllegalArgumentException("Pet requires a name");
         }
 
         // Check that the gender is valid
         Integer gender = values.getAsInteger(PetEntry.COLUMN_PET_GENDER);
         if (gender == null || !PetEntry.isValidGender(gender)) {
             return 0;
-            //throw new IllegalArgumentException("Pet requires valid gender");
         }
 
         // If the weight is provided, check that it's greater than or equal to 0 kg
