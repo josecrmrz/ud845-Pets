@@ -137,7 +137,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         });
     }
 
-    private void insertPet() {
+    private void savePet() {
         String name = mNameEditText.getText().toString().trim();
         String breed = mBreedEditText.getText().toString().trim();
         int weight;
@@ -154,7 +154,34 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(PetEntry.COLUMN_PET_GENDER, mGender);
         values.put(PetEntry.COLUMN_PET_WEIGHT, weight);
 
-        Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
+        Uri newUri = null;
+
+        if (mUri == null) {
+            newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
+
+            if (newUri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_insert_pet_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_insert_pet_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            int updatedRows = getContentResolver().update(mUri, values, null, null);
+
+            // Show a toast message depending on whether or not the update was successful.
+            if (updatedRows == 0) {
+                // If no rows were affected, then there was an error with the update.
+                Toast.makeText(this, getString(R.string.editor_update_pet_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the update was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_update_pet_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
 
         if (newUri == null) {
             // If the new content URI is null, then there was an error with insertion.
@@ -181,7 +208,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                insertPet();
+                savePet();
                 finish();
                 return true;
             // Respond to a click on the "Delete" menu option
